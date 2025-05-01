@@ -33,3 +33,8 @@
     (if (equal a b)
     nil
     t))
+
+(defun boolean-implies (a b)
+  (if (equal a b)
+    t
+    nil))
