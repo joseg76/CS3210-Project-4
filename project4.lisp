@@ -34,7 +34,22 @@
     nil
     t))
 
-(defun boolean-implies (a b)
-  (if (equal a b)
-    t
-    nil))
+(defun merge-sort (lst predicate)
+  (if (or (null lst) (null (cdr lst)))  ; Base case: empty list or single element
+      lst
+      ;; Split the list, sort both halves, then merge
+      (let* ((length (length lst))
+             (middle (floor length 2))
+             (left-half (subseq lst 0 middle))
+             (right-half (subseq lst middle)))
+        (merge-lists (merge-sort left-half predicate)
+                     (merge-sort right-half predicate)
+                     predicate))))
+
+(defun merge-lists (list1 list2 predicate)
+  (cond ((null list1) list2)                   ; If list1 is empty, return list2
+        ((null list2) list1)                   ; If list2 is empty, return list1
+        ((funcall predicate (car list1) (car list2)) ; Use predicate for comparison
+         (cons (car list1) (merge-lists (cdr list1) list2 predicate)))
+        (t                                     ; Otherwise
+         (cons (car list2) (merge-lists list1 (cdr list2) predicate)))))
