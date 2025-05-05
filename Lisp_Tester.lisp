@@ -13,7 +13,7 @@
          (expected (test-case-expected tc)))
     (if (equal result expected)
         (format t "~A: PASS~%" (test-case-name tc))
-        (format t "~A: FAIL~%  Expected: ~S~%  Got:      ~S~%~%" 
+        (format t "~A: FAIL~%  Expected: ~S~%  Got: ~S~%~%" 
                 (test-case-name tc) expected result))))
 
 ;;;; Run a list of test cases
