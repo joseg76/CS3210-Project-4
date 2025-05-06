@@ -34,6 +34,9 @@
     nil
     t))
 
+(defun boolean-implies (a b)
+  (or (not a) b))
+
 (defun boolean-iff (a b)
   (if (equal a b)
     t
