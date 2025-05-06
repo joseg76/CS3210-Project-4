@@ -5,6 +5,14 @@
             t
             (set-member (cdr set) item))))
 
+#|(defun set-union (set-1 set-2)
+  (if (null set-2)
+      set-1
+      (let ((item (car set-2)))
+        (if (set-member set-1 item)
+            (set-union set-1 (cdr set-2))
+            (set-union (cons item set-1) (cdr set-2)))))) |#
+
 (defun set-union (set-1 set-2)
   (if (null set-2)
       set-1
