@@ -44,7 +44,7 @@
   
 (defun boolean-eval (exp)
   (cond
-    ((atom exp) exp) ; if it's just t or nil
+    ((atom exp) exp)
     ((equal (car exp) 'not)
      (not (boolean-eval (second exp))))
     ((equal (car exp) 'and)
@@ -57,7 +57,7 @@
      (boolean-implies (boolean-eval (second exp)) (boolean-eval (third exp))))
     ((equal (car exp) 'iff)
      (boolean-iff (boolean-eval (second exp)) (boolean-eval (third exp))))
-    (t nil))) ; fallback in case of an unsupported expression
+    (t nil)))
 
 (defun merge-sort (lst predicate)
   (if (or (null lst) (null (cdr lst)))  ; Base case: empty list or single element

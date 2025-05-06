@@ -175,7 +175,7 @@ Note: Use only the following standard Lisp functions, macros, operators, and con
 
 ;;  (boolean-eval '(and t nil)) => nil
 
-;;  (boolean-eval '(and t (or nil t)) => t
+;;  (boolean-eval '(and t (or nil t))) => t
 
 (defun boolean-eval (exp)
 
