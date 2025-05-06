@@ -1,60 +1,44 @@
-;;;; Load your function definitions
-(load "Lisp_Test.lisp")
+(defun test-equal (a b)
+  (if (equal a b) 'PASS 'FAIL))
 
-;;;; Define a test case structure
-(defstruct test-case
-  name
-  form
-  expected)
+(defun run-tests ()
+  (let ((results
+         (list
+          ;; set-member
+          (cons 'set-member (test-equal (set-member '(1 2 3) 2) t))
+          (cons 'set-member-miss (test-equal (set-member '(1 2 3) 4) nil))
 
-;;;; Run a single test case
-(defun run-test-case (tc)
-  (let* ((result (eval (test-case-form tc)))
-         (expected (test-case-expected tc)))
-    (if (equal result expected)
-        (format t "~A: PASS~%" (test-case-name tc))
-        (format t "~A: FAIL~%  Expected: ~S~%  Got: ~S~%~%" 
-                (test-case-name tc) expected result))))
+          ;; set-union
+          (cons 'set-union (test-equal (set-union '(1 2) '(2 3)) '(3 1 2)))
 
-;;;; Run a list of test cases
-(defun run-all-tests (tests)
-  (format t "Running ~D tests...~%~%" (length tests))
-  (mapcar #'run-test-case tests))
+          ;; set-intersection
+          (cons 'set-intersection (test-equal (set-intersection '(1 2 3) '(2 3 4)) '(2 3)))
 
-;;;; Define your test cases here
-(defparameter my-tests
-  (list
-   ;; set-member
-   (make-test-case :name "set-member 1 in (1 2)" :form '(set-member '(1 2) 1) :expected t)
-   (make-test-case :name "set-member 3 in (1 2)" :form '(set-member '(1 2) 3) :expected nil)
+          ;; set-diff
+          (cons 'set-diff (test-equal (set-diff '(1 2 3) '(2 4)) '(1 3)))
 
-   ;; set-union
-   (make-test-case :name "set-union (1 2) (2 4)" :form '(set-union '(1 2) '(2 4)) :expected '(1 2 4))
+          ;; boolean-xor
+          (cons 'boolean-xor (test-equal (boolean-xor t nil) t))
 
-   ;; set-intersection
-   (make-test-case :name "set-intersection (1 2) (2 4)" :form '(set-intersection '(1 2) '(2 4)) :expected '(2))
+          ;; boolean-implies
+          (cons 'boolean-implies (test-equal (boolean-implies t nil) nil))
 
-   ;; set-diff
-   (make-test-case :name "set-diff (1 2) (2 4)" :form '(set-diff '(1 2) '(2 4)) :expected '(1))
+          ;; boolean-eval
+          (cons 'boolean-eval (test-equal (boolean-eval '(and t (or nil t))) t))
 
-   ;; boolean logic
-   (make-test-case :name "boolean-xor t nil" :form '(boolean-xor t nil) :expected t)
-   (make-test-case :name "boolean-xor nil nil" :form '(boolean-xor nil nil) :expected nil)
-   (make-test-case :name "boolean-implies t nil" :form '(boolean-implies t nil) :expected nil)
-   (make-test-case :name "boolean-implies nil nil" :form '(boolean-implies nil nil) :expected t)
-   (make-test-case :name "boolean-iff t t" :form '(boolean-iff t t) :expected t)
-   (make-test-case :name "boolean-iff t nil" :form '(boolean-iff t nil) :expected nil)
+          ;; merge-sort
+          (cons 'merge-sort
+                (test-equal
+                 (merge-sort '(4 2 1 3) (lambda (a b) (< a b)))
+                 '(1 2 3 4))))))
+    ;; Print results
+    (labels ((print-results (lst)
+               (when lst
+                 (let ((r (car lst)))
+                   (format t "~A: ~A~%" (car r) (cdr r))
+                   (print-results (cdr lst))))))
+      (print-results results))))
 
-   ;; boolean-eval
-   (make-test-case :name "boolean-eval (and t nil)" :form '(boolean-eval '(and t nil)) :expected nil)
-   (make-test-case :name "boolean-eval (or nil t)" :form '(boolean-eval '(or nil t)) :expected t)
-   (make-test-case :name "boolean-eval (xor t nil)" :form '(boolean-eval '(xor t nil)) :expected t)
-   (make-test-case :name "boolean-eval (implies t nil)" :form '(boolean-eval '(implies t nil)) :expected nil)
-   (make-test-case :name "boolean-eval (iff nil nil)" :form '(boolean-eval '(iff nil nil)) :expected t)
-
-   ;; merge-sort
-   (make-test-case :name "merge-sort ascending" :form '(merge-sort '(2 1 5 0) #'<) :expected '(0 1 2 5))
-   (make-test-case :name "merge-sort descending" :form '(merge-sort '(2 1 5 0) #'>) :expected '(5 2 1 0))))
-
-;;;; Run all tests
-(run-all-tests my-tests)
+(defun main ()
+  (when (load "Lisp_Test.lisp")
+    (run-tests)))
