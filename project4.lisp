@@ -11,7 +11,7 @@
       (let ((item (car set-2)))
         (if (set-member set-1 item)
             (set-union set-1 (cdr set-2))
-            (set-union (cons item set-1) (cdr set-2))))))
+            (set-union (append set-1 (list item)) (cdr set-2))))))
 
 (defun set-intersection (set-1 set-2)
   (if (null set-1)

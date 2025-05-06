@@ -40,5 +40,5 @@
       (print-results results))))
 
 (defun main ()
-  (when (load "Lisp_Test.lisp")
+  (when (load "project4.lisp")
     (run-tests)))
